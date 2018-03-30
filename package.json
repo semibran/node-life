@@ -3,8 +3,8 @@
   "version": "0.0.0",
   "description": "update function for life-like cellular automata",
   "author": "semibran (Brandon Semilla)",
-  "license": "MIT",
   "repository": "semibran/life",
+  "license": "MIT",
   "main": "lib/life.js",
   "keywords": [ "life", "game-of-life", "cellular-automata" ]
 }
