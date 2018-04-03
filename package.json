@@ -1,7 +1,7 @@
 {
   "name": "life",
   "version": "0.0.0",
-  "description": "update function for life-like cellular automata",
+  "description": "tiny update function for life-like cellular automata",
   "author": "semibran (Brandon Semilla)",
   "repository": "semibran/life",
   "license": "MIT",

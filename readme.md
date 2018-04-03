@@ -1,5 +1,5 @@
 # life
-> update function for [life-like cellular automata]
+> tiny update function for [life-like cellular automata]
 
 ```js
 import update from "life"
