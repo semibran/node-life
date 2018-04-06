@@ -1,64 +1,52 @@
-import update from "../../lib/life"
+import World from "./world"
+import View from "./view"
 
-let world = {
-  rule: { birth: [ 3 ], survival: [ 2, 3 ] },
-  cells: [ 127, 128, 128, 127, 129, 127, 128, 128, 128, 129 ]
-}
-
-let viewport = {
-  halfsize: [ 128, 128 ],
-  position: [ 0, 0 ]
-}
-
-actions: {
-    update({ world }) {
-      let next = update(world.cells, world.rule)
-      world.prev = world.cells
-      world.cells = next
-    }
+let state = (_ => {
+  let world = {
+    rule: { birth: [ 3 ], survival: [ 2, 3 ] },
+    prev: null,
+    cells: [
+      1, 0,
+      2, 0,
+      0, 1,
+      1, 1,
+      1, 2
+    ]
   }
-}
 
-let canvas = document.createElement("canvas")
-let context = canvas.getContext("2d")
-canvas.width = state.viewport.halfsize[0] * 2
-canvas.height = state.viewport.halfsize[1] * 2
-
-let image = context.getImageData(0, 0, canvas.width, canvas.height)
-let view = {
-  state: {
-    root: canvas,
-    context: context,
-    image: image
-  },
-  actions: {
-    render({ view }, { world }) {
-      render(world.cells, image)
-      context.putImageData(image, 0, 0)
-    }
+  let viewport = {
+    size: [ 256, 256 ],
+    position: [ 0, 0 ]
   }
+
+  let view = (viewport => {
+    let [ vw, vh ] = viewport.size
+    let canvas = document.createElement("canvas")
+    canvas.width = vw
+    canvas.height = vh
+
+    let context = canvas.getContext("2d")
+    let image = context.getImageData(0, 0, canvas.width, canvas.height)
+
+    return {
+      context: context,
+      image: image
+    }
+  })(viewport)
+
+  return { world, viewport, view }
+})()
+
+const actions = {
+  world: World,
+  view: View
 }
 
-document.body.appendChild(view.state.root)
+document.body.appendChild(state.view.context.canvas)
 requestAnimationFrame(loop)
 
 function loop() {
-  world.actions.update(world.state)
-  world.cells = update(world.cells, world.rule)
-  view.actions.render(view.state, app.state)
+  actions.world.update(state.world)
+  actions.view.render(state.view, state.world, state.viewport)
   requestAnimationFrame(loop)
-}
-
-function render(cells, image) {
-  for (let i = 0; i < cells.length; i += 2) {
-    let x = cells[i]
-    let y = cells[i + 1]
-    if (x >= 0 && y >= 0 && x < image.width && y < image.height) {
-      let index = (y * image.width + x) * 4
-      image.data[index + 0] = 0
-      image.data[index + 1] = 0
-      image.data[index + 2] = 0
-      image.data[index + 3] = 255
-    }
-  }
 }
