@@ -1,8 +1,20 @@
-export default {
-  render(view, state) {
-    update(view.image, state.world, state.viewport)
-    view.context.putImageData(view.image, 0, 0)
+function View(width, height) {
+  let canvas = document.createElement("canvas")
+  canvas.width = width
+  canvas.height = height
+
+  let context = canvas.getContext("2d")
+  let image = context.getImageData(0, 0, width, height)
+
+  return {
+    context: context,
+    image: image
   }
+}
+
+function render(view, state) {
+  update(view.image, state.world, state.viewport)
+  view.context.putImageData(view.image, 0, 0)
 }
 
 function update(image, world, viewport) {
@@ -29,3 +41,6 @@ function update(image, world, viewport) {
     }
   }
 }
+
+export default View
+View.render = render
