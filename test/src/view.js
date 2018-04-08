@@ -1,6 +1,6 @@
 export default {
-  render(view, world, viewport) {
-    update(view.image, world, viewport)
+  render(view, state) {
+    update(view.image, state.world, state.viewport)
     view.context.putImageData(view.image, 0, 0)
   }
 }
